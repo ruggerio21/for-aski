@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Aski ❤️</title>
+    <style>
+        :root {
+            --primary: #fb6f92;
+            --primary-light: #ffc2d1;
+            --accent: #4cc9f0;
+            --text: #c0366b;
+            --outline-color: #ffb7ce;
+            --bg-gradient: linear-gradient(135deg, #ffe5ec 0%, #ffc3a0 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; margin: 0; background: var(--bg-gradient);
+            text-align: center; overflow: hidden;
+            position: relative;
+        }
+
+        .heart {
+            position: absolute; color: var(--primary); font-size: 20px;
+            user-select: none; pointer-events: none; z-index: 1;
+            animation: float 4s linear forwards;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* UPDATED CONTAINER: BIGGER AND WIDER */
+        .container {
+            background: rgba(255, 255, 255, 0.9); padding: 3rem 2rem;
+            border-radius: 40px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            max-width: 500px; width: 90%; z-index: 10; backdrop-filter: blur(10px);
+            border: 5px solid var(--outline-color); position: relative;
+            min-height: 400px; display: flex; flex-direction: column; justify-content: center;
+        }
+
+        h1 { color: var(--text); font-size: 1.6rem; font-weight: 800; margin-bottom: 1.5rem; }
+        p { color: var(--text); font-size: 1.1rem; line-height: 1.5; }
+        
+        button { padding: 18px 36px; border-radius: 20px; border: none; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+        .next-btn { background: var(--accent); color: white; width: 100%; margin-top: 20px; }
+
+        .choice-btn {
+            background: white; color: var(--text); border: 2px solid var(--primary-light);
+            width: 100%; margin: 10px 0; font-size: 1rem; padding: 18px; border-radius: 20px;
+        }
+        
+        .fighter-box { width: 45%; aspect-ratio: 1/1; background: #fff0f3; border-radius: 25px; border: 4px solid #ffccd5; cursor: pointer; overflow: hidden; }
+        .fighter-box img, .fighter-box video { width: 100%; height: 100%; object-fit: cover; }
+        .feedback-media { width: 100%; border-radius: 20px; margin: 15px 0; }
+        .small-video { width: 70%; margin: 10px auto; border-radius: 15px; display: block; }
+        .hidden { display: none !important; }
+        
+        #pixel-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            display: grid; grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+            pointer-events: none; z-index: 9999; visibility: hidden;
+        }
+        .pixel-square { background: var(--primary); opacity: 0; transition: opacity 0.3s ease; }
+
+        .gift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px; }
+        .gift-card { background: white; padding: 40px 15px; border-radius: 25px; border: 2px solid var(--outline-color); cursor: pointer; font-size: 3rem; display: flex; justify-content: center; align-items: center; overflow: hidden; flex-direction: column;}
+
+        @keyframes dispense {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .photobooth-strip {
+            animation: dispense 1.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+        }
+
+        #letter-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1000; display: flex;
+            justify-content: center; align-items: center;
+        }
+        
+        .letter-paper {
+            background-color: #f4f1ea;
+            padding: 3rem 2rem; border-radius: 2px;
+            max-width: 85%; max-height: 80vh; overflow-y: auto;
+            text-align: left; position: relative; border: 1px solid #dcd9c0;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.3);
+            font-family: 'Special Elite', 'Courier New', monospace; line-height: 1.8; color: #444;
+            transform: rotate(-1deg);
+        }
+        .letter-paper p { color: #444; margin-bottom: 1.5rem; font-size: 1rem; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #888; font-weight: bold; z-index: 1001; }
+
+        .video-container-page { border: 8px solid #ffccd5 !important; padding: 2rem !important; overflow: hidden; }
+
+        #envelope-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s; }
+        #envelope-wrapper.active { opacity: 1; visibility: visible; }
+        .envelope { position: relative; width: 350px; height: 230px; background: #fdfcf5; border-radius: 0 0 5px 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transform-style: preserve-3d; }
+        .flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f2e8c9; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top; transition: transform 0.6s 0.3s; z-index: 3; }
+        .pocket { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fdfcf5; clip-path: polygon(0 40%, 50% 100%, 100% 40%, 100% 100%, 0 100%); border-radius: 0 0 5px 5px; z-index: 4; border-top: 1px solid #eae1bc; }
+        .rising-paper { position: absolute; top: 20px; left: 15px; width: 320px; height: 180px; background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.1); z-index: 2; transition: transform 0.8s 0.9s, opacity 0.4s 1.5s; display: flex; justify-content: center; align-items: center; font-family: 'Caveat', cursive; color: #777; font-size: 1.8rem; }
+        #envelope-wrapper.open .flap { transform: rotateX(180deg); }
+        #envelope-wrapper.open .rising-paper { transform: translateY(-130px); }
+
+        .image-grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px auto;
+            width: 90%;
+        }
+        .grid-img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--primary-light);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="pixel-overlay"></div>
+    
+    <audio id="happy-song" src="https://www.myinstants.com/media/sounds/happy-happy-happy-cat.mp3" loop></audio>
+    <audio id="laugh-audio" src="cat laughing.mp3" loop></audio>
+    <audio id="applause-audio" src="applause.mp3" loop></audio>
+    <audio id="grandpa-audio" src="grandpa sound.mp3" loop></audio>
+    <audio id="ronaldo-audio" src="ronaldo wine sound.mp3" loop></audio>
+    <audio id="scuba-audio" src="scuba.mp3" loop></audio>
+    <audio id="gd-audio" src="gd.mp3" loop></audio>
+
+    <div id="lock-screen" class="container">
+        <h1>Enter Passcode</h1>
+        <input type="password" id="passcode-input" style="padding:15px; border-radius:15px; border:2px solid var(--outline-color); width:80%; margin-bottom:20px; font-size:1.2rem;" maxlength="4" inputmode="numeric">
+        <button class="next-btn" style="background:var(--primary)" onclick="checkPasscode()">Unlock</button>
+    </div>
+
+    <div id="page1" class="container hidden">
+        <h1 id="header-text">HAPPY BIRTHDAY ASKI!!! 🎂<br>Do you want to see what i've prepared for you?</h1>
+        <div style="height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;">
+            <button id="yes-btn" style="background:white; color:var(--text); border:2px solid var(--primary-light);" onclick="handleYes()">Yes</button>
+            <button id="no-btn" style="background:var(--primary); color:white;" onclick="handleNo()">No</button>
+        </div>
+    </div>
+
+    <div id="cat-page" class="container hidden">
+        <h1>Okie! ✨</h1>
+        <video autoplay loop muted playsinline style="width:100%; border-radius:20px;"><source src="Happy cat dancing.mp4" type="video/mp4"></video>
+        <p style="font-weight:bold; color:var(--primary); margin-top:15px;">Happy Happy Happy! 🎶</p>
+        <button class="next-btn" onclick="triggerQuiz()">Next! ➡</button>
+    </div>
+
+    <div id="quiz-1-page" class="container hidden">
+        <h1>Who would win in a fight? 🥊</h1>
+        <video autoplay loop muted playsinline style="width:70%; border-radius:15px; margin-bottom:15px;"><source src="fight-reaction.mp4" type="video/mp4"></video>
+        <div style="display:flex; justify-content:space-around; align-items:center; gap:10px;">
+            <div class="fighter-box" onclick="quizAnswer(1, 'wrong')"><img src="fight loser.jpg"></div>
+            <div style="font-weight:900; color:var(--primary)">VS</div>
+            <div class="fighter-box" onclick="quizAnswer(1, 'correct')"><img src="fight winner.jpg"></div>
+        </div>
+    </div>
+    
+    <div id="incorrect-1" class="container hidden"><h1>Wrong answer lil bro 😂</h1><video id="laugh-video" loop muted playsinline class="small-video"><source src="laughing cat.mp4" type="video/mp4"></video><button class="next-btn" onclick="quizReturn(1)">Try Again</button></div>
+    <div id="correct-1" class="container hidden"><h1>Correct! 😎</h1><img src="thumbs up cat.GIF" class="feedback-media"><button class="next-btn" onclick="triggerTransition('correct-1', 'reaction-page', false, true)">Next</button></div>
+    <div id="reaction-page" class="container hidden"><h1>Your honest reaction:</h1><video id="grandpa-video" autoplay loop muted playsinline class="feedback-media"><source src="grandpa.mp4" type="video/mp4"></video><button class="next-btn" onclick="triggerTransition('reaction-page', 'quiz-2-page', false, false, true)">Next ➡</button></div>
+    <div id="quiz-2-page" class="container hidden"><h1>Who is a smart fella and who's a fart smella? 💨</h1><div style="display:flex; justify-content:space-around; align-items:center; gap:10px; margin-top:20px;"><div class="fighter-box" onclick="quizAnswer(2, 'correct')"><img src="fart smella.jpg"></div><div class="fighter-box" onclick="quizAnswer(2, 'wrong')"><img src="smart fella.jpg"></div></div></div>
+    <div id="correct-2" class="container hidden"><h1>CORRECT! ✅</h1><video autoplay loop muted playsinline class="feedback-media"><source src="ronaldo wine.mp4" type="video/mp4"></video><button class="next-btn" onclick="triggerTransition('correct-2', 'quiz-3-page', false, false, false, true)">Final ➡</button></div>
+    <div id="incorrect-2" class="container hidden"><h1>WRONG. 🤨</h1><video autoplay loop muted playsinline class="feedback-media"><source src="black stare.mp4" type="video/mp4"></video><button class="next-btn" onclick="quizReturn(2)">Try Again</button></div>
+    <div id="quiz-3-page" class="container hidden"><h1>Who had more aura as a child? ✨</h1><div style="display:flex; justify-content:space-around; align-items:center; gap:10px; margin-top:20px;"><div class="fighter-box" onclick="quizAnswer(3, 'wrong')"><img src="baby nandita.jpg"></div><div style="font-weight:900; color:var(--primary)">VS</div><div class="fighter-box" onclick="quizAnswer(3, 'correct')"><img src="baby ruggerio.jpg"></div></div></div>
+    <div id="incorrect-3" class="container hidden"><h1>WRONG HAHAHA 😂</h1><video autoplay loop muted playsinline class="feedback-media"><source src="nick wilde.mp4" type="video/mp4"></video><button class="next-btn" onclick="quizReturn(3, true)">Try Again</button></div>
+    <div id="correct-3" class="container hidden"><img src="yuno ball.jpg" style="width:100%; border-radius:20px;"><button class="next-btn" onclick="triggerTransition('correct-3', 'intro-this-that')">Continue ➡</button></div>
+    
+    <div id="intro-this-that" class="container hidden">
+        <h1>Enough of me rage baiting you...</h1>
+        <p>Let's see how well I know you. I've had A.I. make these questions because it would be unfair if I was the one who made them. Anyways, my answers will be shown on completion of this whole thingy. Tell me how many I get right.</p>
+        <button class="next-btn" onclick="triggerTransition('intro-this-that', 'tt-1')">Let's Start ➡</button>
+    </div>
+
+    <div id="tt-1" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(1)">Never having to pay for a flight again</button><button class="choice-btn" onclick="nextTT(1)">Never having to pay for a meal again</button></div>
+    <div id="tt-2" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(2)">Me knowing exactly what's bothering you</button><button class="choice-btn" onclick="nextTT(2)">Me always knowing exactly how to make you laugh when you're tilted</button></div>
+    <div id="tt-3" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(3)">A month long trip exploring every corner of Europe</button><button class="choice-btn" onclick="nextTT(3)">A month long trip hopping between the best cities in Asia</button></div>
+    <div id="tt-4" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(4)">Only being able to watch movies that we've already seen before</button><button class="choice-btn" onclick="nextTT(4)">Only being able to watch new movies we might end up hating</button></div>
+    <div id="tt-5" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(5)">Living in a tiny apartment but we have all the time in the world</button><button class="choice-btn" onclick="nextTT(5)">Having a massive house but we’re always busy</button></div>
+    <div id="tt-6" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(6)">Me surprising you with gifts you actually wanted</button><button class="choice-btn" onclick="nextTT(6)">Me surprising you with trips you never expected</button></div>
+    <div id="tt-7" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(7)">A rainy day spent watching shows in bed</button><button class="choice-btn" onclick="nextTT(7)">A perfect sunny day out doing something spontaneous</button></div>
+    <div id="tt-8" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(8)">Keeping all the photos but the memories are slightly blurry</button><button class="choice-btn" onclick="nextTT(8)">Losing all the photos but keeping the memories perfect</button></div>
+    <div id="tt-9" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(9)">Being the couple that has the best aesthetic</button><button class="choice-btn" onclick="nextTT(9)">Being the couple that has the most chaotic stories</button></div>
+    <div id="tt-10" class="container hidden"><h1>This or That?</h1><button class="choice-btn" onclick="nextTT(10)">Knowing the exact date of every big thing in our future</button><button class="choice-btn" onclick="nextTT(10)">Every single milestone being a complete surprise</button></div>
+
+    <div id="my-answers-page" class="container hidden">
+        <h1>My Answers...</h1>
+        <div style="font-size: 1rem; text-align: left; background: #fff; padding: 20px; border-radius: 20px; border: 2px solid var(--outline-color); max-height: 250px; overflow-y: auto;">
+            <p>1. Flight | 2. Make you laugh | 3. Europe | 4. Re-watch | 5. Tiny Apt/Time | 6. Expected Gifts | 7. Rainy bed | 8. Memories perfect | 9. Aesthetic | 10. Knowing dates</p>
+        </div>
+        <button class="next-btn" onclick="goToGiftGrid()">Final Gifts! 🎁</button>
+    </div>
+
+    <div id="grid-page" class="container hidden">
+        <h1>Choose your gift! 🎁</h1>
+        <div class="gift-grid">
+            <div class="gift-card" onclick="startLetterSequence()">✉️</div>
+            <div class="gift-card" onclick="triggerBoothReveal('grid-page', 'video-page')">👩&zwj;❤️&zwj;👨</div>
+            <div class="gift-card" style="grid-column: span 2; padding: 15px;">
+                <a href="https://youtu.be/7kct0NKcJHo?si=qlCAnY3pnGTF2rwN" target="_blank" style="text-decoration: none;">
+                    <img src="gdp.jpg" style="width: 100px; height: 100px; border-radius: 10px;" alt="GDP image">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="video-page" class="container hidden video-container-page">
+        <div id="booth-content">
+            <h1>This was the only decent thing I had of us. Nonetheless, I love you</h1>
+            <div class="image-grid-container">
+                <img src="grid1.jpg" class="grid-img">
+                <img src="grid2.jpg" class="grid-img">
+                <img src="grid3.jpg" class="grid-img">
+                <img src="grid4.jpg" class="grid-img">
+            </div>
+            <p style="font-weight: bold;">I love you</p>
+        </div>
+        <button class="next-btn" onclick="triggerTransition('video-page', 'grid-page')">⬅ Back</button>
+    </div>
+
+    <div id="letter-modal" class="hidden">
+        <div class="letter-paper">
+            <span class="close-modal" onclick="closeLetter()">&times;</span>
+            <p>Dear Nandita,</p>
+            <p>As I write this letter to you, I realise that I am more used to our LDR than writing a letter. Honestly, it feels a bit weird to even try putting this into words instead of just texting you like I usually do so please bear with me as you read all of this.</p>
+            <p>For some reason when I look at you, I am reminded of the calm hills that you see in Shillong. Maybe it's because being around you makes me feel at ease like the same way I feel when I'm on a hill back home or maybe that's because that's where our next and final meet in a long time will be. I guess this is a bittersweet situation for us huh? But either way, I'd love to spend our time together as much as possible even if it's only for a short time.</p>
+            <p>I'd also like to apologise for not being able to give you much time these days. College has been really draining and this whole thing that I'm trying to make for you is also quite time consuming. I know you didn't ask for any of it however I'd still like to do something for you. It's not something too fancy but I hope you like it. Sorry it couldn't get any better than this.</p>
+            <p>Last but not least I have something to confess and apologise to you because I lied. Yes, I lied to you when I said I was gonna go sleep but it was only because I knew I'd never be able to complete this on time if I didn't lie to you so please don't be mad at me. Anyways let's forget about all that and umm congratulations on getting into Christ and even though it might not have been the campus you originally wanted, you still got in so kudos to that and I'm proud of you. I know it's not something too big but I think hearing these kind of words from your partner make you feel somewhat happier than hearing it from someone else yeah? Don't get me wrong though, I mean it with my whole heart when I say I'm proud of you. I also love you Po and I miss you each and every single day.</p>
+            <p>I think I'll be ending my letter here now and as my letter is coming to an end, I would like to say thank you for choosing to love me; I feel truly grateful for it which is why I gave you orchids last time. Happy 20th Birthday Nandita, once again I love you so much and May God bless you.</p>
+            <p>P.S. I think of you when it rains. I hope you think of me too, the same I think of you when it rains.</p>
+        </div>
+    </div>
+
+    <div id="envelope-wrapper">
+        <div class="envelope"><div class="flap"></div><div class="pocket"></div><div class="rising-paper">For Nandita... ❤️</div></div>
+    </div>
+
+    <script>
+        let stage = "start"; let noScale = 1;
+        const song = document.getElementById('happy-song');
+        const laughAudio = document.getElementById('laugh-audio');
+        const applauseAudio = document.getElementById('applause-audio');
+        const grandpaAudio = document.getElementById('grandpa-audio');
+        const ronaldoAudio = document.getElementById('ronaldo-audio');
+        const scubaAudio = document.getElementById('scuba-audio');
+        const gdAudio = document.getElementById('gd-audio');
+        const overlay = document.getElementById('pixel-overlay');
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart'; heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+        setInterval(createHeart, 400);
+
+        // TRIGGER MUSIC ON ANSWERS PAGE INSTEAD OF GIFT PAGE
+        function nextTT(num) { 
+            if (num < 10) {
+                triggerTransition(`tt-${num}`, `tt-${num+1}`); 
+            } else {
+                gdAudio.play(); // Play music when transitioning to the answers page
+                triggerTransition('tt-10', 'my-answers-page'); 
+            }
+        }
+
+        function goToGiftGrid() {
+            triggerTransition('my-answers-page', 'grid-page');
+        }
+
+        function triggerBoothReveal(hideId, showId) {
+            triggerTransition(hideId, showId);
+            setTimeout(() => {
+                document.getElementById('booth-content').classList.add('photobooth-strip');
+            }, 800);
+        }
+
+        for (let i = 0; i < 144; i++) {
+            let div = document.createElement('div'); div.className = 'pixel-square'; overlay.appendChild(div);
+        }
+
+        function triggerTransition(hideId, showId, stopMusic = false, stopApplause = false, stopGrandpa = false, stopRonaldo = false, stopScuba = false) {
+            const pixels = Array.from(document.querySelectorAll('.pixel-square'));
+            overlay.style.visibility = 'visible';
+            const shuffled = pixels.sort(() => Math.random() - 0.5);
+            shuffled.forEach((pixel, index) => { setTimeout(() => { pixel.style.opacity = '1'; }, index * 4); });
+            
+            setTimeout(() => {
+                document.getElementById(hideId).classList.add('hidden');
+                document.getElementById(showId).classList.remove('hidden');
+                if(showId === 'incorrect-1') { laughAudio.play(); document.getElementById('laugh-video').play(); }
+                if(showId === 'correct-1') applauseAudio.play();
+                if(showId === 'reaction-page') grandpaAudio.play();
+                if(showId === 'correct-2') ronaldoAudio.play();
+                if(showId === 'incorrect-3') scubaAudio.play();
+                if(stopMusic) song.pause();
+                if(stopApplause) applauseAudio.pause();
+                if(stopGrandpa) grandpaAudio.pause();
+                if(stopRonaldo) ronaldoAudio.pause();
+                if(stopScuba) scubaAudio.pause();
+            }, 700);
+            setTimeout(() => { shuffled.forEach((pixel, index) => { setTimeout(() => { pixel.style.opacity = '0'; }, index * 3); }); }, 1000);
+            setTimeout(() => { overlay.style.visibility = 'hidden'; }, 1800);
+        }
+
+        function checkPasscode() { if (document.getElementById('passcode-input').value === "2621") { triggerTransition('lock-screen', 'page1'); } }
+        function handleYes() { if (stage === "start") { triggerTransition('page1', 'cat-page'); song.play(); } else { noScale += 0.4; document.getElementById('no-btn').style.transform = `scale(${noScale})`; if(noScale > 8) { triggerTransition('page1', 'cat-page'); song.play(); } } }
+        function handleNo() { if (stage === "start") { document.getElementById('header-text').innerHTML = "Are you sure? 😢"; stage = "sure"; } else { triggerTransition('page1', 'cat-page'); song.play(); } }
+        function triggerQuiz() { triggerTransition('cat-page', 'quiz-1-page', true); }
+        function quizAnswer(qNum, status) { triggerTransition(`quiz-${qNum}-page`, (status === 'correct') ? `correct-${qNum}` : `incorrect-${qNum}`); }
+        function quizReturn(qNum, isScuba = false) { if(isScuba) scubaAudio.pause(); else laughAudio.pause(); triggerTransition(`incorrect-${qNum}`, `quiz-${qNum}-page`); }
+        function closeLetter() { document.getElementById('letter-modal').classList.add('hidden'); }
+        function startLetterSequence() {
+            const wrapper = document.getElementById('envelope-wrapper');
+            wrapper.classList.add('active');
+            setTimeout(() => wrapper.classList.add('open'), 500);
+            setTimeout(() => { wrapper.classList.remove('active'); document.getElementById('letter-modal').classList.remove('hidden'); }, 2500);
+        }
+    </script>
+</body>
+</html>
